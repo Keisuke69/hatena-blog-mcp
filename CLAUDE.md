@@ -10,7 +10,10 @@
 
 - コミットメッセージに `Co-authored-by: Claude ...` などの**共著者情報を含めない**
 - コミットメッセージに `🤖 Generated with Claude Code` などの**生成元フッターを含めない**
-- コミット著者（author）は Git 設定に従う（Claude Code を著者にしない）
+- コミット著者（author）および committer は **常に以下を使う**（Claude を著者にしない）:
+  - `Keisuke Nishitani <99869611+Keisuke69@users.noreply.github.com>`
+  - 毎コミットで `GIT_AUTHOR_NAME` / `GIT_AUTHOR_EMAIL` / `GIT_COMMITTER_NAME` / `GIT_COMMITTER_EMAIL` を指定するか、`git commit --author=...` + 環境変数で committer も上書きする
+  - グローバル git config を書き換える必要はない（書き換えない）
 - 署名行（`Signed-off-by:` など）も追加しない
 - メッセージは Conventional Commits 形式を推奨: `feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`
 - メッセージ本体は簡潔に、必要なら本文で補足
