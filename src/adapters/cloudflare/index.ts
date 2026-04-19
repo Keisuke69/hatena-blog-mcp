@@ -92,6 +92,19 @@ export function createApp() {
     // so every tool invocation inside this request relays the same header.
     let ctx: ToolContext;
     try {
+      const rawAuth = c.req.header("authorization") ?? "";
+      const authScheme = rawAuth.split(/\s+/, 1)[0] || "<none>";
+      const headerNames: string[] = [];
+      for (const [name] of c.req.raw.headers) headerNames.push(name);
+      console.log(
+        JSON.stringify({
+          tag: "auth-probe",
+          method: c.req.method,
+          authScheme,
+          authLen: rawAuth.length,
+          headerNames,
+        }),
+      );
       const credentials = parseBasicAuth(c.req.header("authorization") ?? null);
       ctx = { credentials };
     } catch (err) {
