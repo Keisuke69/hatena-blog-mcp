@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entry xmlns="http://www.w3.org/2005/Atom"
+       xmlns:app="http://www.w3.org/2007/app"
+       xmlns:hatenablog="http://www.hatena.ne.jp/info/xmlns#hatenablog">
+  <id>tag:blog.hatena.ne.jp,2013:blog-example_user-20000000000000001-8000000000000000001</id>
+  <link rel="edit" href="https://blog.hatena.ne.jp/example_user/example_user.hatenablog.com/atom/page/8000000000000000001"/>
+  <link rel="alternate" type="text/html" href="https://example_user.hatenablog.com/about"/>
+  <author><name>example_user</name></author>
+  <title>About</title>
+  <updated>2026-02-01T09:00:00+09:00</updated>
+  <published>2026-02-01T09:00:00+09:00</published>
+  <app:edited>2026-02-01T09:00:00+09:00</app:edited>
+  <content type="text/x-markdown"># About
+
+このブログについて。</content>
+  <app:control>
+    <app:draft>no</app:draft>
+    <app:preview>no</app:preview>
+  </app:control>
+  <hatenablog:custom-url>about</hatenablog:custom-url>
+</entry>
