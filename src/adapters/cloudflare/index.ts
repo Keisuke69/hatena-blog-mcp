@@ -95,7 +95,7 @@ export function createApp() {
       const rawAuth = c.req.header("authorization") ?? "";
       const authScheme = rawAuth.split(/\s+/, 1)[0] || "<none>";
       const headerNames: string[] = [];
-      for (const [name] of c.req.raw.headers) headerNames.push(name);
+      c.req.raw.headers.forEach((_v, name) => headerNames.push(name));
       console.log(
         JSON.stringify({
           tag: "auth-probe",
