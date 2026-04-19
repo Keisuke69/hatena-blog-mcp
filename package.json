@@ -28,7 +28,8 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.18.0",
     "fast-xml-parser": "^5.2.0",
-    "hono": "^4.9.0"
+    "hono": "^4.9.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.2.0",
