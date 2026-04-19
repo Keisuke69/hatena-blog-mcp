@@ -1,0 +1,43 @@
+{
+  "name": "hatena-blog-mcp",
+  "version": "0.0.1",
+  "description": "MCP server that wraps the Hatena Blog AtomPub API with read/write support, designed for Cloudflare Workers with BYOK (Bring Your Own Key).",
+  "license": "MIT",
+  "author": "Keisuke Nishitani",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keisuke69/hatena-blog-mcp.git"
+  },
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write ."
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.18.0",
+    "fast-xml-parser": "^5.2.0",
+    "hono": "^4.9.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@cloudflare/workers-types": "^4.20250409.0",
+    "@types/node": "^25.6.0",
+    "@vitest/coverage-v8": "^3.2.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0",
+    "wrangler": "^4.12.0"
+  }
+}

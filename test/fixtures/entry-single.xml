@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<entry xmlns="http://www.w3.org/2005/Atom"
+       xmlns:app="http://www.w3.org/2007/app"
+       xmlns:hatenablog="http://www.hatena.ne.jp/info/xmlns#hatenablog"
+       xmlns:hatena="http://www.hatena.ne.jp/info/xmlns#">
+  <id>tag:blog.hatena.ne.jp,2013:blog-example_user-20000000000000001-3000000000000000010</id>
+  <link rel="edit" href="https://blog.hatena.ne.jp/example_user/example_user.hatenablog.com/atom/entry/3000000000000000010"/>
+  <link rel="alternate" type="text/html" href="https://example_user.hatenablog.com/entry/2026/04/18/101500"/>
+  <author><name>example_user</name></author>
+  <title>MCPサーバーをCloudflare Workersで書く</title>
+  <updated>2026-04-18T10:15:00+09:00</updated>
+  <published>2026-04-18T10:15:00+09:00</published>
+  <app:edited>2026-04-18T10:15:00+09:00</app:edited>
+  <summary type="text">MCPサーバーをCloudflare Workersで書いた話。</summary>
+  <content type="text/x-markdown">## はじめに
+
+MCPサーバーをCloudflare Workersで書いてみた。
+
+- ステートレス
+- BYOK
+- Streamable HTTP
+
+コードは &quot;&lt;example&gt;&quot; のように特殊文字も含む。</content>
+  <hatena:formatted-content type="text/html">&lt;h2&gt;はじめに&lt;/h2&gt;&#10;&lt;p&gt;MCPサーバーをCloudflare Workersで書いてみた。&lt;/p&gt;&#10;&lt;ul&gt;&#10;&lt;li&gt;ステートレス&lt;/li&gt;&#10;&lt;li&gt;BYOK&lt;/li&gt;&#10;&lt;li&gt;Streamable HTTP&lt;/li&gt;&#10;&lt;/ul&gt;&#10;&lt;p&gt;コードは &amp;quot;&amp;lt;example&amp;gt;&amp;quot; のように特殊文字も含む。&lt;/p&gt;</hatena:formatted-content>
+  <category term="技術" />
+  <category term="MCP" />
+  <category term="Cloudflare" />
+  <app:control>
+    <app:draft>no</app:draft>
+    <app:preview>no</app:preview>
+    <hatenablog:scheduled>no</hatenablog:scheduled>
+  </app:control>
+</entry>

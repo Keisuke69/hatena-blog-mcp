@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hatena-blog-mcp",
+  "main": "src/adapters/cloudflare/index.ts",
+  "compatibility_date": "2026-01-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": {
+    "enabled": true
+  }
+  // No secrets / no KV / no DO — this server is intentionally stateless (BYOK).
+  // Clients pass credentials via the Authorization header on each request.
+}
