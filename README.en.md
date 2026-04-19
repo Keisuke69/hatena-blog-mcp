@@ -6,15 +6,6 @@ An MCP (Model Context Protocol) server that wraps the [Hatena Blog AtomPub API](
 
 Built for the canonical use case of asking Claude to bulk re-tag categories across every entry in a blog — without accidentally rewriting titles, bodies, or publish dates along the way.
 
-## Why another hatena-blog MCP?
-
-| | This project | `mtb-beta/hatena-blog-mcp` | `serima/hatena-blog-mcp` |
-| --- | --- | --- | --- |
-| Write support | ✅ create / update / delete | ❌ read-only | ❌ read-only |
-| Partial updates that preserve untouched fields | ✅ | — | — |
-| Runtime | Cloudflare Workers (also self-hostable) | Local (Python) | Vercel (Node) |
-| Auth model | BYOK via `Authorization` header (stateless) | Local env vars | Env vars |
-
 ## Features
 
 - Entries: `list_entries`, `get_entry`, `create_entry`, `update_entry`, `delete_entry`

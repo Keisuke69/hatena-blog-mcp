@@ -6,15 +6,6 @@
 
 もともとのユースケースは「Claude にブログ全記事のカテゴリを一括で付け替えてもらう」こと。タイトル・本文・投稿日時を誤って書き換えずに、カテゴリだけを安全に更新できるように設計されています。
 
-## なぜ新しい hatena-blog MCP を作ったか
-
-| | 本プロジェクト | `mtb-beta/hatena-blog-mcp` | `serima/hatena-blog-mcp` |
-| --- | --- | --- | --- |
-| 書き込み対応 | ✅ create / update / delete | ❌ 読み取り専用 | ❌ 読み取り専用 |
-| 未指定フィールドを維持する部分更新 | ✅ | — | — |
-| ランタイム | Cloudflare Workers（セルフホスト可） | ローカル (Python) | Vercel (Node) |
-| 認証方式 | `Authorization` ヘッダ経由の BYOK（ステートレス） | ローカル環境変数 | 環境変数 |
-
 ## 特徴
 
 - エントリ: `list_entries`, `get_entry`, `create_entry`, `update_entry`, `delete_entry`
