@@ -56,15 +56,11 @@ pnpm exec wrangler deploy --var ALLOWED_ORIGINS:"https://claude.ai,https://chatg
 
 ## 認証 (BYOK)
 
-このサーバーは **認証情報を一切保存しません**。各リクエストには以下のいずれかを含めてください:
+このサーバーは **認証情報を一切保存しません**。各リクエストには以下を必ず含めてください:
 
 ```
-Authorization: Basic  base64(hatena_id:api_key)   # 推奨 (はてなネイティブ)
-Authorization: Bearer base64(hatena_id:api_key)   # OAuth プロキシ経由用
-Authorization: Bearer hatena_id:api_key           # OAuth プロキシ経由 (プレーン)
+Authorization: Basic base64(hatena_id:api_key)
 ```
-
-`Bearer` で受け取ったトークンはサーバ内で `Basic` に組み直してからはてなに中継します。`hatena_id` と `api_key` の両方が必要なのは Hatena AtomPub の仕様 (Basic 認証) によるものです。**API キーだけ** を渡すと認証は通りません。
 
 API キーは **はてなブログ → 設定 → 詳細設定 → AtomPub** から取得できます。`hatena_id` はブログ URL の左側部分 (`<hatena_id>.hatenablog.com`) です。
 
@@ -115,20 +111,6 @@ npx @modelcontextprotocol/inspector
 ```
 
 Inspector では **Streamable HTTP** を選択し、URL に `http://localhost:8787/mcp`、カスタムヘッダに `Authorization: Basic <base64>` を設定します。
-
-### OAuth プロキシ (mcp-oauth-proxy など) の前段に置く場合
-
-Claude.ai のリモート MCP コネクタは OAuth しか喋らないため、本サーバを直接登録できないクライアントもあります。その場合 [mcp-oauth-proxy](https://github.com/AthenZ/mcp-oauth-proxy) のようなツールで OAuth を被せ、上流 (本サーバ) には固定の `Authorization` ヘッダを中継させる構成になります。プロキシが `Bearer ` プレフィックスを強制する場合は、Auth Header Value に **`hatena_id:api_key`** (または同じものを base64 化した値) を入れてください。**API キー単独はダメです** — `hatena_id` も必要です。
-
-例: プロキシの設定値
-
-```
-hatena_id:api_key                    # プレーン (プロキシが Bearer を付ける)
-# または
-<base64(hatena_id:api_key)>          # base64 形式 (Basic と同じエンコーディング)
-```
-
-ワイヤ上は `Authorization: Bearer hatena_id:api_key` のような形になり、本サーバが受け取った時点で `Basic base64(...)` に組み直してはてなへ中継します。
 
 ---
 
@@ -211,7 +193,7 @@ src/
   adapters/cloudflare/
     index.ts   — Hono アプリ: CORS → BYOK 認証 → Streamable HTTP トランスポート
   utils/
-    auth.ts    — parseAuthHeader (Basic + Bearer)
+    auth.ts    — parseBasicAuth
     retry.ts   — 指数バックオフ + jitter、Retry-After を尊重
 test/
   fixtures/    — 実 AtomPub レスポンスのサンプル
