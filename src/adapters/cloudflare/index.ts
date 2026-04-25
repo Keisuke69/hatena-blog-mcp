@@ -2,7 +2,7 @@ import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/
 import { Hono } from "hono";
 import type { ToolContext } from "../../mcp/context.js";
 import { createServer } from "../../mcp/server.js";
-import { MissingCredentialsError, parseBasicAuth } from "../../utils/auth.js";
+import { MissingCredentialsError, parseAuthHeader } from "../../utils/auth.js";
 
 // ---------------------------------------------------------------------------
 // CORS
@@ -105,7 +105,7 @@ export function createApp() {
           headerNames,
         }),
       );
-      const credentials = parseBasicAuth(c.req.header("authorization") ?? null);
+      const credentials = parseAuthHeader(c.req.header("authorization") ?? null);
       ctx = { credentials };
     } catch (err) {
       if (err instanceof MissingCredentialsError) {
@@ -114,7 +114,8 @@ export function createApp() {
             jsonrpc: "2.0",
             error: {
               code: -32001,
-              message: "Authorization header (Basic <base64(hatena_id:api_key)>) is required.",
+              message:
+                "Authorization required: 'Basic base64(hatena_id:api_key)' or 'Bearer <hatena_id:api_key | base64>'.",
             },
             id: null,
           },

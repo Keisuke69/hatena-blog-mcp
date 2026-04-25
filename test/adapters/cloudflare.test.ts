@@ -117,17 +117,90 @@ describe("cloudflare adapter — auth", () => {
     expect(body.error?.message).toContain("Authorization");
   });
 
-  it("non-Basic scheme → 401", async () => {
+  it("Bearer with no embedded hatena_id → 401", async () => {
     const res = await app.request("/mcp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Accept: "application/json, text/event-stream",
-        Authorization: "Bearer xxx",
+        Authorization: "Bearer just-the-api-key",
       },
       body: jsonRpc("tools/list", {}),
     });
     expect(res.status).toBe(401);
+  });
+
+  it("unsupported scheme → 401", async () => {
+    const res = await app.request("/mcp", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json, text/event-stream",
+        Authorization: "Digest opaque-stuff",
+      },
+      body: jsonRpc("tools/list", {}),
+    });
+    expect(res.status).toBe(401);
+  });
+});
+
+describe("cloudflare adapter — Bearer auth (mcp-oauth-proxy)", () => {
+  const app = createApp();
+
+  it("Bearer base64(hatena_id:api_key) is normalised to Basic when relayed to Hatena", async () => {
+    const expected = `Basic ${btoa("example_user:apikey")}`;
+    const original = globalThis.fetch;
+    let observedAuth: string | null = null;
+    globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+      observedAuth = new Headers(init?.headers).get("authorization");
+      return new Response(readFixture("entry-list.xml"), { status: 200 });
+    }) as typeof fetch;
+    try {
+      const res = await app.request("/mcp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
+          Authorization: `Bearer ${btoa("example_user:apikey")}`,
+        },
+        body: jsonRpc("tools/call", {
+          name: "list_entries",
+          arguments: { blog_id: "example_user.hatenablog.com" },
+        }),
+      });
+      expect(res.status).toBe(200);
+      expect(observedAuth).toBe(expected);
+    } finally {
+      globalThis.fetch = original;
+    }
+  });
+
+  it("Bearer hatena_id:api_key (plaintext) is normalised to Basic when relayed to Hatena", async () => {
+    const expected = `Basic ${btoa("example_user:apikey")}`;
+    const original = globalThis.fetch;
+    let observedAuth: string | null = null;
+    globalThis.fetch = (async (_input: RequestInfo | URL, init?: RequestInit) => {
+      observedAuth = new Headers(init?.headers).get("authorization");
+      return new Response(readFixture("entry-list.xml"), { status: 200 });
+    }) as typeof fetch;
+    try {
+      const res = await app.request("/mcp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json, text/event-stream",
+          Authorization: "Bearer example_user:apikey",
+        },
+        body: jsonRpc("tools/call", {
+          name: "list_entries",
+          arguments: { blog_id: "example_user.hatenablog.com" },
+        }),
+      });
+      expect(res.status).toBe(200);
+      expect(observedAuth).toBe(expected);
+    } finally {
+      globalThis.fetch = original;
+    }
   });
 });
 

@@ -56,11 +56,15 @@ pnpm exec wrangler deploy --var ALLOWED_ORIGINS:"https://claude.ai,https://chatg
 
 ## Authentication (BYOK)
 
-This server stores **no credentials**. Every request must carry:
+This server stores **no credentials**. Every request must carry one of:
 
 ```
-Authorization: Basic base64(hatena_id:api_key)
+Authorization: Basic  base64(hatena_id:api_key)   # native form (recommended)
+Authorization: Bearer base64(hatena_id:api_key)   # for OAuth proxies
+Authorization: Bearer hatena_id:api_key           # OAuth proxy (plain)
 ```
+
+`Bearer` payloads are normalised to `Basic` server-side before being relayed to Hatena. Both `hatena_id` and `api_key` are required by Hatena's AtomPub spec — passing **only the API key will not authenticate**.
 
 Get your API key from **Hatena Blog → Settings → Advanced → AtomPub**. The Hatena ID is the left side of your blog URL (`<hatena_id>.hatenablog.com`).
 
@@ -111,6 +115,20 @@ npx @modelcontextprotocol/inspector
 ```
 
 In the inspector, choose **Streamable HTTP**, URL `http://localhost:8787/mcp`, and set a custom header `Authorization: Basic <base64>`.
+
+### Behind an OAuth proxy (e.g. mcp-oauth-proxy)
+
+Some clients (notably the Claude.ai remote MCP connector) only speak OAuth, so you cannot register this server directly. The usual workaround is to wrap it with something like [mcp-oauth-proxy](https://github.com/AthenZ/mcp-oauth-proxy), which handles OAuth toward the client and forwards a fixed `Authorization` header to the upstream (this server).
+
+If your proxy hardcodes the `Bearer ` prefix, set its Auth Header Value to **`hatena_id:api_key`** (or its base64 form). **Do not pass the API key alone** — the Hatena AtomPub spec requires `hatena_id` too.
+
+```
+hatena_id:api_key                    # plain (proxy adds the Bearer prefix)
+# or
+<base64(hatena_id:api_key)>          # base64 (same encoding as Basic)
+```
+
+On the wire it shows up as `Authorization: Bearer hatena_id:api_key`; this server re-encodes it to `Basic base64(...)` before calling Hatena.
 
 ---
 
@@ -193,7 +211,7 @@ src/
   adapters/cloudflare/
     index.ts   — Hono app: CORS → BYOK auth → Streamable HTTP transport
   utils/
-    auth.ts    — parseBasicAuth
+    auth.ts    — parseAuthHeader (Basic + Bearer)
     retry.ts   — exponential backoff + jitter, honours Retry-After
 test/
   fixtures/    — real AtomPub response samples
